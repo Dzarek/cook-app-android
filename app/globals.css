@@ -1,0 +1,1058 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400|Inconsolata:400");
+@import url("https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kolker+Brush&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --headingFont: "Inconsolata", monospace;
+  --bodyFont: "Montserrat", sans-serif;
+  --logoFont: "Dancing Script", cursive;
+  --secondaryColor: #7f1d1d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+body {
+  background-image: url("/images/bgIcons.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  width: 100vw;
+}
+
+.page {
+  min-height: 100vh;
+  margin-top: 12vh;
+}
+
+.logoFont {
+  font-family: "Dancing Script", cursive;
+  letter-spacing: 2px;
+}
+
+.navHamburger {
+  width: 55px;
+  height: 55px;
+  display: none;
+  font-size: 2.5rem;
+  border-radius: 0 0 10px 10px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: #fff;
+}
+
+.navHamburger2 {
+  width: 50px;
+  height: 50px;
+
+  display: none;
+  font-size: 2rem;
+  border-radius: 10px 10px 0 0;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: #fff;
+}
+
+@media screen and (max-width: 1280px) {
+  .navHamburger,
+  .navHamburger2 {
+    display: flex;
+  }
+}
+
+.recipe {
+  width: 21vw;
+  height: 400px;
+  border: 2px solid gray;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--bodyFont);
+  margin: 2vw;
+  animation: recipeShow 1s ease 1 forwards;
+}
+@media screen and (max-width: 1280px) {
+  .recipe {
+    width: 45%;
+    min-height: 400px;
+    margin: 1vw;
+    margin-bottom: 5vh;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .recipe {
+    width: 100%;
+    min-height: 50vh;
+    margin: 0vw;
+    margin-bottom: 5vh;
+  }
+}
+
+.recipeProfile {
+  width: 21vw;
+  height: 50vh;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--bodyFont);
+}
+
+.recipeProfileAnimation {
+  animation: recipeShow 1s ease 1 forwards;
+}
+
+@keyframes recipeShow {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media screen and (max-width: 1280px) {
+  .recipeProfile {
+    width: 80%;
+    height: 58vh;
+  }
+}
+
+.recipe-img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.recipe-imgProfile {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 6px;
+
+  /* margin-bottom: 5px; */
+}
+@media screen and (max-width: 1024px) {
+  .recipe-imgProfile {
+    margin-bottom: 0px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1280px) {
+  .recipeProfile {
+    width: 80%;
+    height: 58vh;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .recipe-imgProfile {
+    height: 100%;
+    width: 55%;
+    border-radius: 6px;
+    object-fit: fill;
+  }
+  .recipe-sectionProfile {
+    height: 100%;
+    width: 45%;
+  }
+}
+
+.recipeIcon {
+  font-size: 1.6rem;
+  color: #444;
+  margin-right: 10px;
+}
+
+.logoJarek {
+  position: absolute;
+  bottom: 10%;
+  left: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+}
+.logoJarek a {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+}
+.logoJarek a img {
+  width: 100%;
+  height: 100%;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+.logoJarek a img :hover {
+  filter: invert(100%);
+}
+
+.logoJarek p {
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  color: white;
+}
+@media screen and (max-width: 800px) {
+  .logoJarek {
+    bottom: 2%;
+    left: 3%;
+  }
+}
+/* SCROOL BAR */
+
+html::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+html::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+html::-webkit-scrollbar-thumb {
+  background: #46110b;
+  border: 2px solid #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+html::-webkit-scrollbar-thumb:hover {
+  background: #0d0801;
+}
+
+.upBtn {
+  position: fixed;
+  bottom: 3vh;
+  right: 3vw;
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  color: var(--secondaryColor);
+  transition: 0.5s;
+  cursor: pointer;
+  z-index: 9999;
+}
+.upBtn:hover {
+  color: var(--secondaryColor3);
+}
+.upBtnNone {
+  opacity: 0;
+}
+
+.knifeRotate {
+  animation: knifeRotate 2s linear 1 forwards;
+}
+@keyframes knifeRotate {
+  0% {
+    transform: translateX(-60vw);
+  }
+  100% {
+    transform: rotate(225deg) translateX(0vw);
+  }
+}
+.knifeRotate2 {
+  animation: knifeRotate2 2s linear 1 forwards;
+}
+@keyframes knifeRotate2 {
+  0% {
+    transform: translateX(60vw);
+  }
+  100% {
+    transform: rotate(45deg) translateX(0vw);
+  }
+}
+.spoonRotate {
+  animation: spoonRotate 2s linear 1 forwards;
+}
+@keyframes spoonRotate {
+  0% {
+    transform: translateX(-60vw);
+  }
+  100% {
+    transform: rotate(45deg) translateX(0vw);
+  }
+}
+.forkRotate {
+  animation: forkRotate 2s linear 1 forwards;
+}
+@keyframes forkRotate {
+  0% {
+    transform: translateX(60vw);
+  }
+  100% {
+    transform: rotate(225deg) translateX(0vw);
+  }
+}
+.recipeRotate {
+  animation: recipeRotate 2s linear 1 forwards;
+}
+@keyframes recipeRotate {
+  0% {
+    transform: translateX(-60vw);
+  }
+  100% {
+    transform: rotate(-45deg) translateX(0vw);
+  }
+}
+.recipeRotate2 {
+  animation: recipeRotate2 2s linear 1 forwards;
+}
+@keyframes recipeRotate2 {
+  0% {
+    transform: translateX(60vw);
+  }
+  100% {
+    transform: rotate(0deg) translateX(0vw);
+  }
+}
+.recipeRotate4 {
+  transform: rotateY(180deg);
+  animation: recipeRotate3 2s linear 1 forwards;
+}
+@keyframes recipeRotate3 {
+  0% {
+    transform: translateX(-60vw) rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(180deg) translateX(0vw);
+  }
+}
+
+/* @media screen and (max-width: 900px) {
+  .knifeRotate {
+    transform: rotate(225deg);
+    animation: none;
+  }
+
+  .knifeRotate2 {
+    transform: rotate(45deg);
+    animation: none;
+  }
+
+  .spoonRotate {
+    transform: rotate(45deg);
+    animation: none;
+  }
+
+  .forkRotate {
+    transform: rotate(225deg);
+    animation: none;
+  }
+
+  .recipeRotate {
+    transform: rotate(-45deg);
+    animation: none;
+  }
+
+  .recipeRotate2 {
+    animation: none;
+  }
+
+  .recipeRotate4 {
+    transform: rotateY(180deg);
+    animation: none;
+  }
+} */
+
+.newRecipeInput {
+  border: 2px solid #7f1d1d;
+  border-radius: 6px;
+  font-size: 1.125rem /* 18px */;
+  line-height: 1.75rem;
+  flex-grow: 1;
+  background-color: #fbf3f3;
+  padding: 4px 10px;
+}
+.profilInput {
+  border: 2px solid #ffffff;
+  border-radius: 6px;
+  font-size: 1rem /* 18px */;
+  line-height: 1.75rem;
+  flex-grow: 1;
+  background-color: #ffffff;
+  padding: 4px 10px;
+}
+.adminInput {
+  border: 2px solid #7f1d1d;
+  border-radius: 6px;
+  font-size: 1.125rem /* 18px */;
+  line-height: 1.75rem;
+  min-width: 20vw;
+  background-color: #fff;
+  padding: 6px 10px;
+  text-align: center;
+  margin-bottom: 2vh;
+  font-weight: 500;
+  color: #000;
+}
+
+.wrapperBG {
+  background-image: url("/images/loginBg2.jpg");
+  background-position: bottom right;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  animation: bgMove 15s linear infinite alternate;
+  z-index: 20;
+}
+
+@keyframes bgMove {
+  0% {
+    background-size: 100%;
+  }
+  100% {
+    background-size: 110%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .wrapperBG {
+    animation: none;
+  }
+}
+
+.wrapperLogin {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* background-color: rgba(35, 6, 6, 0.6); */
+  /* background-color: rgba(186, 186, 186, 0.6); */
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 50px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.containerLogin {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+  width: 45vw;
+  min-height: 60vh;
+}
+@media screen and (max-width: 1200px) {
+  .containerLogin {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+.containerLogin section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 800px) {
+  .containerLogin section {
+    flex-direction: column-reverse;
+  }
+}
+
+.errorInfo {
+  font-size: 1.1rem;
+  text-align: center;
+  color: #444;
+  font-weight: 500;
+  text-transform: uppercase;
+  width: 80%;
+}
+@media screen and (max-width: 800px) {
+  .errorInfo {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+.wrapperLogin h2 {
+  text-transform: uppercase;
+  color: var(--secondaryColor);
+  font-size: 2rem;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  letter-spacing: 2px;
+  text-align: center;
+}
+@media screen and (max-width: 800px) {
+  .wrapperLogin h2 {
+    font-size: 1.6rem;
+  }
+}
+.wrapperLogin form {
+  margin: 3vh auto 5vh;
+  margin-right: 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 45%;
+}
+@media screen and (max-width: 800px) {
+  .wrapperLogin form {
+    width: 90%;
+    margin: 3vh auto 5vh;
+  }
+}
+.wrapperLogin input {
+  font-size: 1rem;
+  width: 100%;
+  margin: 1vh auto;
+  padding: 10px 20px;
+  border: 1px solid #111;
+  border-radius: 5px;
+  font-weight: 500;
+  font-family: var(--textFont);
+}
+
+.forgotPasswordLink {
+  color: #888;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.4s;
+  margin-top: 10px;
+  text-align: right;
+  align-self: flex-end;
+}
+.forgotPasswordLink:hover {
+  color: var(--secondaryColor);
+}
+
+.wrapperLogin button {
+  margin: 4vh auto 0vh;
+  padding: 10px 30px;
+  color: #000;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--textFont);
+  cursor: pointer;
+  transition: 0.4s;
+  background-color: #eee;
+}
+.wrapperLogin .registrationBtn {
+  margin: 0vh auto;
+  padding: 10px 20px;
+  margin-left: 15px;
+  color: #000;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--textFont);
+  cursor: pointer;
+  transition: 0.4s;
+  background-color: #eee;
+}
+.wrapperLogin button:hover {
+  background-color: var(--secondaryColor);
+  color: white;
+}
+
+.changeAvatarBtn:hover svg {
+  color: white;
+}
+
+.starIcon {
+  color: var(--secondaryColor);
+  font-size: 1.5rem;
+  margin-left: 0.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lvlAsk {
+  color: #555;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+svg:not(.starRotate) + .starRotate {
+  animation: rotate 5s linear infinite;
+}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.importModal {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bigContainer {
+  width: 50vw;
+  min-height: 50vh;
+  background: #111;
+  border: 4px solid var(--secondaryColor);
+  border-radius: 5px;
+  padding: 30px;
+  position: relative;
+}
+@media screen and (max-width: 900px) {
+  .bigContainer {
+    position: absolute;
+    width: 100vw;
+    min-height: 100vh;
+    top: 0;
+    left: 0;
+  }
+}
+.closeBtn {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  font-size: 2.5rem;
+  color: var(--secondaryColor);
+  transition: 0.4s;
+  cursor: pointer;
+}
+.closeBtn:hover {
+  transform: rotate(180deg);
+}
+@media screen and (max-width: 1200px) {
+  .closeBtn {
+    top: 2%;
+  }
+}
+.importModal h3 {
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--secondaryColor);
+  font-size: 2rem;
+  margin-top: 7vh;
+  margin-bottom: 7vh;
+  letter-spacing: 2px;
+}
+@media screen and (max-width: 1200px) {
+  .importModal h3 {
+    margin-top: 10vh;
+  }
+}
+.importModal form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5vh auto;
+}
+.importModal label {
+  margin-bottom: 2vh;
+  text-align: center;
+}
+.importModal input {
+  font-family: var(--textFont);
+  font-weight: 600;
+  text-transform: lowercase;
+  padding: 5px 10px;
+  background: white;
+  color: #222;
+  text-align: center;
+}
+.importModal button {
+  background-color: white;
+  color: #111;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin: 5vh auto 0;
+  transition: 0.4s;
+  font-weight: 600;
+}
+.importModal button:hover {
+  background-color: var(--secondaryColor);
+  color: white;
+}
+
+.importModal p {
+  text-align: center;
+  font-weight: 500;
+}
+@media screen and (max-width: 1200px) {
+  .importModal p {
+    margin-top: 10vh;
+  }
+}
+
+/* From Uiverse.io by Nawsome */
+.loader {
+  --background: linear-gradient(135deg, #580c0c, #fe2727);
+  --shadow: rgba(254, 39, 39, 0.28);
+  --text: #cdcfd5;
+  --page: rgba(255, 255, 255, 0.36);
+  --page-fold: rgba(255, 255, 255, 0.52);
+  --duration: 3s;
+  width: 200px;
+  height: 140px;
+  position: relative;
+}
+
+.loader:before,
+.loader:after {
+  --r: -6deg;
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  width: 120px;
+  top: 80%;
+  box-shadow: 0 16px 12px var(--shadow);
+  transform: rotate(var(--r));
+}
+
+.loader:before {
+  left: 4px;
+}
+
+.loader:after {
+  --r: 6deg;
+  right: 4px;
+}
+
+.loader div {
+  width: 100%;
+  height: 100%;
+  border-radius: 13px;
+  position: relative;
+  z-index: 1;
+  perspective: 600px;
+  box-shadow: 0 4px 6px var(--shadow);
+  background-image: var(--background);
+}
+
+.loader div ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.loader div ul li {
+  --r: 180deg;
+  --o: 0;
+  --c: var(--page);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transform-origin: 100% 50%;
+  color: var(--c);
+  opacity: var(--o);
+  transform: rotateY(var(--r));
+  -webkit-animation: var(--duration) ease infinite;
+  animation: var(--duration) ease infinite;
+}
+
+.loader div ul li:nth-child(2) {
+  --c: var(--page-fold);
+  -webkit-animation-name: page-2;
+  animation-name: page-2;
+}
+
+.loader div ul li:nth-child(3) {
+  --c: var(--page-fold);
+  -webkit-animation-name: page-3;
+  animation-name: page-3;
+}
+
+.loader div ul li:nth-child(4) {
+  --c: var(--page-fold);
+  -webkit-animation-name: page-4;
+  animation-name: page-4;
+}
+
+.loader div ul li:nth-child(5) {
+  --c: var(--page-fold);
+  -webkit-animation-name: page-5;
+  animation-name: page-5;
+}
+
+.loader div ul li svg {
+  width: 90px;
+  height: 120px;
+  display: block;
+}
+
+.loader div ul li:first-child {
+  --r: 0deg;
+  --o: 1;
+}
+
+.loader div ul li:last-child {
+  --o: 1;
+}
+
+.loader span {
+  display: block;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text);
+  font-size: 18px;
+  width: 50vw;
+  margin: 40px auto 0;
+  font-weight: 500;
+}
+
+@keyframes page-2 {
+  0% {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  35%,
+  100% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes page-3 {
+  15% {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+
+  65%,
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes page-4 {
+  30% {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  65%,
+  100% {
+    opacity: 0;
+  }
+
+  80%,
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes page-5 {
+  45% {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+
+  65% {
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    opacity: 0;
+  }
+
+  95%,
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+.profileBtnSaveChanges {
+  animation: scaleBtn 1s ease infinite alternate;
+}
+
+@keyframes scaleBtn {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+@keyframes scaleLikeBtn {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+@keyframes scaleLikeBtn2 {
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.editAddRecipeItem {
+  animation: editAddRecipeItem 1s ease infinite alternate;
+}
+
+@keyframes editAddRecipeItem {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: #fef9c3;
+  }
+}
+
+.likeBtn {
+  font-size: 2rem;
+  color: rgb(114, 0, 0);
+  animation: scaleLikeBtn2 1s 1 ease;
+}
+.dislikeBtn {
+  font-size: 2rem;
+  color: rgb(114, 0, 0);
+  animation: scaleLikeBtn 1s 1 ease;
+}
+
+@media screen and (max-width: 1024px) {
+  .likeBtn {
+    font-size: 2rem;
+  }
+  .dislikeBtn {
+    font-size: 2rem;
+  }
+}
+
+.rankingList::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.rankingList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 30px;
+}
+
+/* Handle */
+.rankingList::-webkit-scrollbar-thumb {
+  background: #740b0b;
+  border-radius: 30px;
+}
+
+/* Handle on hover */
+.rankingList::-webkit-scrollbar-thumb:hover {
+  background: #3d0808;
+}
+
+.awardAnim {
+  animation: awardAnim 1s linear infinite alternate;
+}
+
+@keyframes awardAnim {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+.submit-btn2 {
+  background: #3f4f7c;
+  border-color: transparent;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: white;
+  transition: 1s;
+  font-size: 1.2rem;
+  border: 2px solid #555;
+  font-weight: 700;
+  height: 40px;
+  width: 40px;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 3vh auto 0;
+}
+
+.submit-btn3 {
+  animation: submitAnim 0.5s infinite alternate;
+}
+
+@keyframes submitAnim {
+  0% {
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1);
+  }
+
+  100% {
+    color: black;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+}
+
+.cookieLink {
+  margin-left: 10px;
+  cursor: pointer;
+  color: #7f1d1d;
+}
