@@ -57,7 +57,7 @@ const OneRecipePage = async ({
           </h1>
           <BiFork className="text-2xl xl:text-4xl text-red-900 ml-5 forkRotate" />
           <NativeShareButton
-            url={`https://stepkigotuja.netlify.app/przepisy/${id}`}
+            url={`https://dzarek-nextjs-mysql.xaa.pl/przepisy/${id}`}
             title={title}
           />
           <LikeControl likes={likes} userID={author.authorID} recipeID={id} />

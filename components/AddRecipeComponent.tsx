@@ -440,7 +440,7 @@ const AddRecipeComponent = ({
                 className={
                   newCategory.includes(tag)
                     ? "bg-red-900 text-white transition-all border-red-900 border-2 p-2 m-4 rounded-md cursor-pointer"
-                    : "border-red-900 bg-[#ffffff] border-2 p-2 m-4 rounded-md cursor-pointer hover:bg-red-900 hover:text-white transition-all"
+                    : "border-red-900 bg-[#ffffff] border-2 p-2 m-4 rounded-md cursor-pointer xl:hover:bg-red-900 xl:hover:text-white transition-all"
                 }
               >
                 {tag}
