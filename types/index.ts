@@ -15,7 +15,11 @@ type Recipe = {
   portion: number;
   category: string[];
   shortInfo: string;
-  ingredients: string[];
+  ingredients: {
+    id: string;
+    cate: string;
+    names: string[];
+  }[];
   steps: string[];
   description?: string;
   likes: string[];

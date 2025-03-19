@@ -7,18 +7,30 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import toast from "react-hot-toast";
 
+type CategoryIngredients = {
+  id: string;
+  cate: string;
+  names: string[];
+};
+
 type VoiceType = {
-  newIngredients: string[];
-  setNewIgredients: (newIgredients: string[]) => void;
+  newIngredients: CategoryIngredients[];
+  setNewIngredients: (newIngredients: CategoryIngredients[]) => void;
   toastText: string;
   setActiveVoice: (activeVoice: string) => void;
+  activeCategoryIngredientsBtn: string;
+  setActiveCategoryIngredientsBtn: (
+    activeCategoryIngredientsBtn: string
+  ) => void;
 };
 
 const VoiceIngredient = ({
   newIngredients,
-  setNewIgredients,
+  setNewIngredients,
   toastText,
   setActiveVoice,
+  activeCategoryIngredientsBtn,
+  setActiveCategoryIngredientsBtn,
 }: VoiceType) => {
   const [voiceOn, setVoiceOn] = useState(true);
   const [toastId, setToastId] = useState<string | null>(null);
@@ -73,7 +85,34 @@ const VoiceIngredient = ({
 
   const addItemVoice = (item: string) => {
     if (item) {
-      setNewIgredients([...newIngredients, item]);
+      if (newIngredients.length < 1) {
+        const newCategoryI = {
+          id: Date.now().toString(),
+          cate: "inne",
+          names: [item],
+        };
+        setNewIngredients([newCategoryI]);
+        setActiveCategoryIngredientsBtn("inne");
+      }
+      if (
+        activeCategoryIngredientsBtn === "" &&
+        !newIngredients.find((item) => item.cate === "inne")
+      ) {
+        const newCategoryI = {
+          id: Date.now().toString(),
+          cate: "inne",
+          names: [item],
+        };
+        setNewIngredients([...newIngredients, newCategoryI]);
+        setActiveCategoryIngredientsBtn("inne");
+      } else {
+        const updatedItems = newIngredients.map((ingredient) =>
+          ingredient.cate === activeCategoryIngredientsBtn
+            ? { ...ingredient, names: [...ingredient.names, item] }
+            : ingredient
+        );
+        setNewIngredients(updatedItems);
+      }
     }
   };
 

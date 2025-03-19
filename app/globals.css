@@ -1056,3 +1056,16 @@ svg:not(.starRotate) + .starRotate {
   cursor: pointer;
   color: #7f1d1d;
 }
+
+.ingredientAnim {
+  animation: igredientAnim 0.5s ease 1 forwards;
+}
+
+@keyframes igredientAnim {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

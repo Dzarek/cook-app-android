@@ -8,6 +8,7 @@ import { getAllRecipes } from "@/lib/actions";
 import LikeControl from "@/components/LikeControl";
 import NativeShareButton from "@/components/ShareBtn";
 import AddComent from "@/components/AddComment";
+import RecipeIngredients from "@/components/RecipeIngredients";
 
 const OneRecipePage = async ({
   params: { id },
@@ -18,15 +19,16 @@ const OneRecipePage = async ({
 
   const oneRecipe = allRecipes.find((recipe) => recipe.id === id);
 
-  // const comments = [
+  // const ingredients2 = [
   //   {
-  //     id: "sdad",
-  //     user: {
-  //       uid: "dasdasd",
-  //       name: "Oliwka",
-  //       avatar: "/assets/images/avatars/female/avatark1.jpg",
-  //     },
-  //     text: "Dziękuje ciociu za przepis!",
+  //     id: "1",
+  //     cate: "aaa",
+  //     names: ["aaa", "bbb", "vvv"],
+  //   },
+  //   {
+  //     id: "2",
+  //     cate: "xxx",
+  //     names: ["aaa2", "bbb2", "vvv"],
   //   },
   // ];
 
@@ -57,7 +59,7 @@ const OneRecipePage = async ({
           </h1>
           <BiFork className="text-2xl xl:text-4xl text-red-900 ml-5 forkRotate" />
           <NativeShareButton
-            url={`https://dzarek-nextjs-mysql.xaa.pl/przepisy/${id}`}
+            url={`https://stepkigotuja.netlify.app/przepisy/${id}`}
             title={title}
           />
           <LikeControl likes={likes} userID={author.authorID} recipeID={id} />
@@ -124,10 +126,10 @@ const OneRecipePage = async ({
         </main>
         <div className="w-[90%] xl:w-4/5 flex flex-col xl:flex-row justify-between items-start mx-auto my-[10vh]">
           <section className="w-full xl:w-[30%] flex flex-col">
-            <h2 className="text-xl xl:text-2xl font-medium font-bodyFont mb-5 w-full bg-red-900 text-white rounded-md px-2 py-1">
+            <h2 className="text-xl xl:text-2xl font-medium font-bodyFont  w-full bg-red-900 text-white rounded-md px-2 py-1">
               Składniki:
             </h2>
-            <ul className="w-[98%] mx-auto xl:w-full">
+            {/* <ul className="w-[98%] mx-auto xl:w-full">
               {ingredients.map((item, index) => {
                 return (
                   <li
@@ -138,7 +140,8 @@ const OneRecipePage = async ({
                   </li>
                 );
               })}
-            </ul>
+            </ul> */}
+            <RecipeIngredients ingredients={ingredients} />
           </section>
           <section className="mt-10 xl:mt-0  w-full xl:w-[60%] flex-grow xl:flex-grow-0 flex flex-col">
             <h2 className="text-xl xl:text-2xl font-medium font-bodyFont mb-5 w-full bg-red-900 text-white rounded-md px-2 py-1">

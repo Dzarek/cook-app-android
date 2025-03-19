@@ -7,7 +7,11 @@ import { useState, useEffect, useRef } from "react";
 import { BsBarChart, BsClockHistory } from "react-icons/bs";
 import { BsPeople } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import { MdDeleteForever } from "react-icons/md";
+import {
+  MdClose,
+  MdDeleteForever,
+  MdOutlineRemoveCircle,
+} from "react-icons/md";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { GiConfirmed } from "react-icons/gi";
 import { postRecipe } from "@/lib/user.actions";
@@ -20,6 +24,12 @@ import ConfirmBtn from "./uiverse/ConfirmBtn";
 import { subscribe } from "@/notification/Notification";
 import { v4 as uuidv4 } from "uuid";
 
+type CategoryIngredients = {
+  id: string;
+  cate: string;
+  names: string[];
+};
+
 const AddRecipeComponent = ({
   edycja,
   userID,
@@ -31,8 +41,16 @@ const AddRecipeComponent = ({
 }) => {
   // Load data from localStorage if it exists
   const loadFromLocalStorage = (key: string, defaultValue: any) => {
-    const savedValue = localStorage.getItem(key);
-    return savedValue ? JSON.parse(savedValue) : defaultValue;
+    if (typeof window === "undefined") return defaultValue; // Ensure it's running on the client
+
+    try {
+      const savedValue = localStorage.getItem(key);
+      return savedValue ? JSON.parse(savedValue) : defaultValue;
+    } catch (error) {
+      console.error(`Error loading ${key} from localStorage:`, error);
+      localStorage.removeItem(key); // Clear corrupted data
+      return defaultValue;
+    }
   };
 
   const [newTitle, setNewTitle] = useState(
@@ -53,8 +71,9 @@ const AddRecipeComponent = ({
   const [newPortion, setNewPortion] = useState(
     loadFromLocalStorage("newPortion", 0)
   );
-  const [newIngredients, setNewIngredients] = useState<string[]>(
-    loadFromLocalStorage("newIngredients", [])
+
+  const [newIngredients, setNewIngredients] = useState<CategoryIngredients[]>(
+    []
   );
   const [editingIngredient, setEditingIngredient] = useState<number>(-1);
   const [newIngredient, setNewIgredient] = useState("");
@@ -75,13 +94,24 @@ const AddRecipeComponent = ({
   const [activeVoice, setActiveVoice] = useState("");
   const [disableBtn, setDisableBtn] = useState(true);
 
+  const [newCategoryIngredients, setNewCategoryIngredients] = useState("");
+  const [activeCategoryIngredients, setActiveCategoryIngredients] =
+    useState(false);
+  const [deleteCategoryIngredients, setDeleteCategoryIngredients] =
+    useState(false);
+
+  const [activeCategoryIngredientsBtn, setActiveCategoryIngredientsBtn] =
+    useState(newIngredients.length > 0 ? newIngredients[0].cate : "");
+
   const { editRecipe, setEditRecipe, name } = useGlobalContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Save data to localStorage whenever any field changes
   const saveToLocalStorage = (key: string, value: any) => {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   };
 
   // useEffect to handle saving to localStorage on change for each field
@@ -114,7 +144,14 @@ const AddRecipeComponent = ({
   }, [newPortion]);
 
   useEffect(() => {
-    saveToLocalStorage("newIngredients", newIngredients);
+    const storedIngredients = loadFromLocalStorage("newIngredients", []);
+    setNewIngredients(storedIngredients);
+  }, []);
+
+  useEffect(() => {
+    if (newIngredients.length > 0) {
+      saveToLocalStorage("newIngredients", newIngredients);
+    }
   }, [newIngredients]);
 
   useEffect(() => {
@@ -166,7 +203,6 @@ const AddRecipeComponent = ({
   };
 
   const handleAddIngredient = () => {
-    const updatedItems = [...newIngredients];
     if (newIngredient === "") {
       toast("wpisz składnik!", {
         icon: "✖",
@@ -176,8 +212,55 @@ const AddRecipeComponent = ({
           color: "#fff",
         },
       });
+      return;
+    }
+    if (newIngredients.length < 1) {
+      const newCategoryI = {
+        id: Date.now().toString(),
+        cate: "inne",
+        names: [newIngredient],
+      };
+      setNewIngredients([newCategoryI]);
+      setActiveCategoryIngredientsBtn("inne");
+      setNewIgredient("");
+    }
+
+    if (
+      activeCategoryIngredientsBtn === "" &&
+      !newIngredients.find((item) => item.cate === "inne")
+    ) {
+      setActiveCategoryIngredientsBtn("inne");
+
+      const newCategoryI = {
+        id: Date.now().toString(),
+        cate: "inne",
+        names: [newIngredient],
+      };
+      setNewIngredients([...newIngredients, newCategoryI]);
+      setNewIgredient("");
+      return;
+    }
+    if (
+      activeCategoryIngredientsBtn === "" &&
+      newIngredients.find((item) => item.cate === "inne")
+    ) {
+      setActiveCategoryIngredientsBtn("inne");
+      const updatedItems = newIngredients.map((ingredient) =>
+        ingredient.cate === "inne"
+          ? { ...ingredient, names: [...ingredient.names, newIngredient] }
+          : ingredient
+      );
+
+      setNewIngredients(updatedItems);
+      setNewIgredient("");
     } else {
-      setNewIngredients([...updatedItems, newIngredient]);
+      const updatedItems = newIngredients.map((ingredient) =>
+        ingredient.cate === activeCategoryIngredientsBtn
+          ? { ...ingredient, names: [...ingredient.names, newIngredient] }
+          : ingredient
+      );
+
+      setNewIngredients(updatedItems);
       setNewIgredient("");
     }
   };
@@ -200,7 +283,11 @@ const AddRecipeComponent = ({
 
   const handleEditIngredient = (index: number) => {
     const updatedItems = [...newIngredients];
-    updatedItems[index] = newIngredient;
+    const updatedItems2 = updatedItems.filter(
+      (item) => item.cate === activeCategoryIngredientsBtn
+    );
+
+    updatedItems2[0].names[index] = newIngredient;
     setNewIngredients(updatedItems);
     setNewIgredient("");
     setEditingIngredient(-1);
@@ -215,13 +302,42 @@ const AddRecipeComponent = ({
 
   const handleDeleteIngedient = (index: number) => {
     const updatedItems = [...newIngredients];
-    updatedItems.splice(index, 1);
-    setNewIngredients(updatedItems);
+    const updatedItems2 = updatedItems.filter(
+      (item) => item.cate === activeCategoryIngredientsBtn
+    );
+    const deletedItem = updatedItems2[0].names.splice(index, 1);
+    const updatedItems3 = updatedItems.filter(
+      (item) => item.cate !== activeCategoryIngredientsBtn
+    );
+    setNewIngredients([...updatedItems3, ...updatedItems2]);
   };
   const handleDeleteStep = (index: number) => {
     const updatedItems = [...newSteps];
     updatedItems.splice(index, 1);
     setNewSteps(updatedItems);
+  };
+
+  const handleAddCategoryIngredient = () => {
+    if (newCategoryIngredients === "") {
+      setActiveCategoryIngredients(false);
+    } else {
+      setActiveCategoryIngredients(false);
+      const newCategoryI = {
+        id: new Date().toString(),
+        cate: newCategoryIngredients,
+        names: [],
+      };
+      setNewIngredients([...newIngredients, newCategoryI]);
+      setNewCategoryIngredients("");
+      setActiveCategoryIngredientsBtn(newCategoryIngredients);
+    }
+  };
+
+  const handleDeleteCategoryIgredient = (category: string) => {
+    setNewIngredients(
+      newIngredients.filter((igredients) => igredients.cate !== category)
+    );
+    setActiveCategoryIngredientsBtn("");
   };
 
   const resetForm = () => {
@@ -527,94 +643,208 @@ const AddRecipeComponent = ({
           <h2 className="text-xl xl:text-2xl font-medium font-bodyFont mb-5 w-full bg-red-900 text-white rounded-md px-2 py-1">
             Składniki:
           </h2>
-          <ul className="w-[95%] mx-auto xl:w-full">
-            {newIngredients.length > 0 &&
-              newIngredients.map((item, index) => {
-                return (
-                  <li
-                    className={
-                      index === editingIngredient
-                        ? "text-base xl:text-lg font-bodyFont mb-2 border-b-2 py-2 flex items-center justify-between editAddRecipeItem rounded-md"
-                        : "text-base xl:text-lg font-bodyFont mb-2 border-b-2 py-2 flex items-center justify-between"
-                    }
-                    key={index}
-                  >
-                    {item}
-                    <div className="flex items-center text-2xl">
-                      <Link
-                        to="editIgredient"
-                        spy={true}
-                        smooth={true}
-                        duration={1000}
-                        offset={-300}
-                      >
-                        <BiEdit
-                          className="mr-3 text-green-900 cursor-pointer"
-                          onClick={() => {
-                            setEditingIngredient(index);
-                            setNewIgredient(item);
-                          }}
-                        />
-                      </Link>
+          {activeCategoryIngredients && (
+            <div className="w-[95%] p-4 relative mx-auto xl:w-full min-h-[25vh] flex flex-col justify-center items-center bg-red-50 ">
+              <button
+                type="button"
+                className="absolute top-2 right-5 "
+                onClick={() => setActiveCategoryIngredients(false)}
+              >
+                <MdClose className="text-3xl text-red-900" />
+              </button>
+              <input
+                type="text"
+                value={newCategoryIngredients}
+                onChange={(e) => setNewCategoryIngredients(e.target.value)}
+                placeholder="wpisz nazwę kategorii składników"
+                className="p-2 border-2 rounded mt-10 w-4/5 border-red-900 text-center uppercase"
+              />
+              <button type="button" onClick={handleAddCategoryIngredient}>
+                <MdOutlineAddCircle className="text-3xl mt-5 text-green-900" />
+              </button>
+            </div>
+          )}
+          {deleteCategoryIngredients && (
+            <div className="w-[95%] p-4 relative mx-auto xl:w-full min-h-[25vh] flex flex-col justify-center items-center bg-red-50 ">
+              <button
+                type="button"
+                className="absolute top-2 right-5 "
+                onClick={() => setDeleteCategoryIngredients(false)}
+              >
+                <MdClose className="text-3xl text-red-900" />
+              </button>
+              <h4 className="mb-3 text-center mt-10">
+                wybierz kategorię którą chcesz usunąć wraz z jej składnikami
+              </h4>
+              <div className="w-full mx-auto flex flex-wrap justify-around items-center">
+                {newIngredients.map((item, index) => {
+                  return (
+                    <button
+                      type="button"
+                      key={index}
+                      onClick={() => handleDeleteCategoryIgredient(item.cate)}
+                      className="border-red-900 uppercase bg-[#ffffff] border-2 p-2 mx-4 my-2 rounded-md cursor-pointer xl:hover:bg-red-900 xl:hover:text-white transition-all"
+                    >
+                      {item.cate}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
-                      <MdDeleteForever
-                        onClick={() => handleDeleteIngedient(index)}
-                        className="text-red-900 cursor-pointer"
+          {!activeCategoryIngredients && !deleteCategoryIngredients && (
+            <>
+              <div className="w-[95%] mx-auto xl:w-full flex flex-col justify-center items-center">
+                <div className="w-full mx-auto flex justify-around items-center mb-4">
+                  <button
+                    type="button"
+                    className="flex items-center text-gray-600 border-2 p-1 rounded-md"
+                    onClick={() => setActiveCategoryIngredients(true)}
+                  >
+                    dodaj kategorie <MdOutlineAddCircle className="ml-2" />
+                  </button>
+                  <button
+                    type="button"
+                    className="flex items-center text-gray-600 border-2 p-1 rounded-md"
+                    onClick={() => setDeleteCategoryIngredients(true)}
+                  >
+                    usuń kategorie <MdOutlineRemoveCircle className="ml-2" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap items-center justify-around w-full">
+                  {newIngredients.map((item, index) => {
+                    return (
+                      <button
+                        type="button"
+                        key={index}
+                        onClick={() =>
+                          setActiveCategoryIngredientsBtn(item.cate)
+                        }
+                        className={
+                          activeCategoryIngredientsBtn === item.cate
+                            ? "bg-red-900 uppercase text-white transition-all border-red-900 border-2 p-2 mx-4 my-2 rounded-md cursor-pointer"
+                            : "border-red-900 uppercase bg-[#ffffff] border-2 p-2 mx-4 my-2 rounded-md cursor-pointer xl:hover:bg-red-900 xl:hover:text-white transition-all"
+                        }
+                      >
+                        {item.cate}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <ul className="w-[95%] mx-auto xl:w-full">
+                {newIngredients.length > 0 &&
+                  newIngredients
+                    .filter(
+                      (item) => item.cate === activeCategoryIngredientsBtn
+                    )
+                    .map((item, index) => {
+                      return (
+                        <div
+                          key={`${activeCategoryIngredientsBtn}-${index}`}
+                          className="ingredientAnim"
+                        >
+                          {item.names.map((item2, index2) => {
+                            return (
+                              <li
+                                className={
+                                  index2 === editingIngredient
+                                    ? "text-base xl:text-lg font-bodyFont mb-2 border-b-2 py-2 flex items-center justify-between editAddRecipeItem rounded-md"
+                                    : "text-base xl:text-lg font-bodyFont mb-2 border-b-2 py-2 flex items-center justify-between"
+                                }
+                                key={index2}
+                              >
+                                {item2}
+                                <div className="flex items-center text-2xl">
+                                  <Link
+                                    to="editIgredient"
+                                    spy={true}
+                                    smooth={true}
+                                    duration={1000}
+                                    offset={-300}
+                                  >
+                                    <BiEdit
+                                      className="mr-3 text-green-900 cursor-pointer"
+                                      onClick={() => {
+                                        setEditingIngredient(index2);
+                                        setNewIgredient(item2);
+                                      }}
+                                    />
+                                  </Link>
+
+                                  <MdDeleteForever
+                                    onClick={() =>
+                                      handleDeleteIngedient(index2)
+                                    }
+                                    className="text-red-900 cursor-pointer"
+                                  />
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+
+                {editingIngredient >= 0 ? (
+                  <Element name="editIgredient">
+                    <h3 className="text-center w-full uppercase text-xl mt-8 font-semibold">
+                      Edycja:
+                    </h3>
+                    <div className="flex items-center justify-between mt-4">
+                      <input
+                        type="text"
+                        value={newIngredient}
+                        onChange={(e) => setNewIgredient(e.target.value)}
+                        className="newRecipeInput flex-grow text-left "
+                      />
+                      <GiConfirmed
+                        className="ml-3 text-green-900 cursor-pointer text-2xl"
+                        onClick={() => handleEditIngredient(editingIngredient)}
                       />
                     </div>
-                  </li>
-                );
-              })}
-            {editingIngredient >= 0 ? (
-              <Element name="editIgredient">
-                <h3 className="text-center w-full uppercase text-xl mt-8 font-semibold">
-                  Edycja:
-                </h3>
-                <div className="flex items-center justify-between mt-4">
-                  <input
-                    type="text"
-                    value={newIngredient}
-                    onChange={(e) => setNewIgredient(e.target.value)}
-                    className="newRecipeInput flex-grow text-left "
-                  />
-                  <GiConfirmed
-                    className="ml-3 text-green-900 cursor-pointer text-2xl"
-                    onClick={() => handleEditIngredient(editingIngredient)}
-                  />
-                </div>
-              </Element>
-            ) : (
-              <Element name="editIgredient">
-                <div>
-                  <div className="flex items-center justify-between mt-8">
-                    <input
-                      type="text"
-                      placeholder="dodaj nowy składnik"
-                      value={newIngredient}
-                      onChange={(e) => setNewIgredient(e.target.value)}
-                      className="newRecipeInput flex-grow text-left text-base"
-                    />
-                    <MdOutlineAddCircle
-                      className="ml-3 text-green-900 cursor-pointer text-4xl"
-                      onClick={handleAddIngredient}
-                    />
-                  </div>
+                  </Element>
+                ) : (
+                  <Element name="editIgredient">
+                    <div>
+                      <div className="flex items-center justify-between mt-8">
+                        <input
+                          type="text"
+                          placeholder="dodaj nowy składnik"
+                          value={newIngredient}
+                          onChange={(e) => setNewIgredient(e.target.value)}
+                          className="newRecipeInput flex-grow text-left text-base"
+                        />
+                        <MdOutlineAddCircle
+                          className="ml-3 text-green-900 cursor-pointer text-4xl"
+                          onClick={handleAddIngredient}
+                        />
+                      </div>
 
-                  {activeVoice !== "stepsVoice" &&
-                    activeVoice !== "descriptionVoice" &&
-                    activeVoice !== "shortInfoVoice" &&
-                    activeVoice !== "titleVoice" && (
-                      <VoiceIngredient
-                        newIngredients={newIngredients}
-                        setNewIgredients={setNewIngredients}
-                        toastText="powiedz nazwę składnika"
-                        setActiveVoice={setActiveVoice}
-                      />
-                    )}
-                </div>
-              </Element>
-            )}
-          </ul>
+                      {activeVoice !== "stepsVoice" &&
+                        activeVoice !== "descriptionVoice" &&
+                        activeVoice !== "shortInfoVoice" &&
+                        activeVoice !== "titleVoice" && (
+                          <VoiceIngredient
+                            newIngredients={newIngredients}
+                            setNewIngredients={setNewIngredients}
+                            toastText="powiedz nazwę składnika"
+                            setActiveVoice={setActiveVoice}
+                            activeCategoryIngredientsBtn={
+                              activeCategoryIngredientsBtn
+                            }
+                            setActiveCategoryIngredientsBtn={
+                              setActiveCategoryIngredientsBtn
+                            }
+                          />
+                        )}
+                    </div>
+                  </Element>
+                )}
+              </ul>
+            </>
+          )}
         </div>
         <div className="xl:ml-[10vw] mt-20 xl:mt-0 w-full xl:w-auto  flex-grow flex flex-col">
           <h2 className="text-xl xl:text-2xl font-medium font-bodyFont mb-5 w-full bg-red-900 text-white rounded-md px-2 py-1">

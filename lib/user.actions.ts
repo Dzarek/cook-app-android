@@ -221,7 +221,11 @@ export const postRecipe = async (
   newPrepTime: number,
   newLevel: string,
   newPortion: number,
-  newIngredients: string[],
+  newIngredients: {
+    id: string;
+    cate: string;
+    names: string[];
+  }[],
   newSteps: string[],
   newDescription: string,
   newSource: string
